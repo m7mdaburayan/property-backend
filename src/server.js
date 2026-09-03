@@ -19,6 +19,7 @@ app.use('/api/tenants', require('./routes/tenants'));
 app.use('/api/contracts', require('./routes/contracts'));
 app.use('/api/payments', require('./routes/payments'));
 app.use('/api/documents', require('./routes/documents'));
+app.use('/api/maintenance', require('./routes/maintenance'));
 
 // نقطة فحص بسيطة للتأكد أن الخادم يعمل
 app.get('/', (req, res) => {
