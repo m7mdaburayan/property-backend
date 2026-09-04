@@ -22,7 +22,7 @@ async function getAllProperties(req, res) {
   try {
     const { minLat, maxLat, minLng, maxLng } = req.query;
 
-    let query = `SELECT id, owner_id, name, property_type, address, city, latitude, longitude, created_at
+        let query = `SELECT id, owner_id, owner_client_id, name, property_type, address, city, latitude, longitude, created_at
                  FROM properties`;
     const params = [];
 
