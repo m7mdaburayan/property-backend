@@ -5,5 +5,7 @@ const controller = require('../controllers/ownerClientsController');
 router.post('/', controller.createClient);
 router.get('/company/:companyId', controller.getClientsByCompany);
 router.post('/link', controller.linkAccount);
+router.get('/linked/:userId', controller.getLinkedProperties);
+
 
 module.exports = router;
