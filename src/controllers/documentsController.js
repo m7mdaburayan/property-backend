@@ -1,26 +1,24 @@
 const pool = require('../db');
 
+// حفظ رابط ملف تم رفعه مسبقاً إلى Cloudinary وربطه بعقار/وحدة/طلب صيانة
 async function uploadDocument(req, res) {
   try {
-    const { related_type, related_id } = req.body;
+    const { related_type, related_id, file_url, file_name } = req.body;
 
-    if (!req.file) {
-      return res.status(400).json({ error: 'لم يتم إرفاق أي ملف' });
+    if (!file_url) {
+      return res.status(400).json({ error: 'لم يتم إرفاق رابط الملف' });
     }
-
-    const file_url = `/uploads/${req.file.filename}`;
-    const file_name = req.file.originalname;
 
     const result = await pool.query(
       `INSERT INTO documents (related_type, related_id, file_url, file_name)
        VALUES ($1, $2, $3, $4) RETURNING *`,
-      [related_type, related_id, file_url, file_name]
+      [related_type, related_id, file_url, file_name || null]
     );
 
     res.status(201).json(result.rows[0]);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'حدث خطأ أثناء رفع الملف' });
+    res.status(500).json({ error: 'حدث خطأ أثناء حفظ الملف' });
   }
 }
 
