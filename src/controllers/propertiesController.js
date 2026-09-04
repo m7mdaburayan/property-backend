@@ -100,10 +100,29 @@ async function deleteProperty(req, res) {
   }
 }
 
+async function assignClient(req, res) {
+  try {
+    const { id } = req.params;
+    const { owner_client_id } = req.body;
+    const result = await pool.query(
+      `UPDATE properties SET owner_client_id = $1 WHERE id = $2 RETURNING *`,
+      [owner_client_id, id]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'العقار غير موجود' });
+    }
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'حدث خطأ أثناء ربط العقار بالمالك' });
+  }
+}
+
 module.exports = {
   createProperty,
   getAllProperties,
   getPropertyById,
   updateProperty,
   deleteProperty,
+  assignClient,
 };
