@@ -69,4 +69,31 @@ async function linkAccount(req, res) {
   }
 }
 
-module.exports = { createClient, getClientsByCompany, linkAccount };
+// جلب كل سجلات الملاك المرتبطة بحساب مستخدم معيّن (عبر رمز الدعوة) مع أسماء عقاراتهم
+async function getLinkedProperties(req, res) {
+  try {
+    const { userId } = req.params;
+    const clients = await pool.query(
+      `SELECT oc.id, oc.management_company_id, u.full_name AS office_name
+       FROM owner_clients oc
+       JOIN users u ON oc.management_company_id = u.id
+       WHERE oc.linked_user_id = $1`,
+      [userId]
+    );
+
+    const result = await Promise.all(clients.rows.map(async (c) => {
+      const props = await pool.query(
+        `SELECT id, name FROM properties WHERE owner_client_id = $1`,
+        [c.id]
+      );
+      return { officeName: c.office_name, properties: props.rows };
+    }));
+
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'حدث خطأ أثناء جلب العقارات المرتبطة' });
+  }
+}
+
+module.exports = { createClient, getClientsByCompany, linkAccount, getLinkedProperties };
