@@ -20,6 +20,9 @@ app.use('/api/contracts', require('./routes/contracts'));
 app.use('/api/payments', require('./routes/payments'));
 app.use('/api/documents', require('./routes/documents'));
 app.use('/api/maintenance', require('./routes/maintenance'));
+app.use('/api/office-settings', require('./routes/officeSettings'));
+app.use('/api/owner-clients', require('./routes/ownerClients'));
+
 
 // نقطة فحص بسيطة للتأكد أن الخادم يعمل
 app.get('/', (req, res) => {
