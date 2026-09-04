@@ -7,5 +7,6 @@ router.get('/', controller.getAllProperties);
 router.get('/:id', controller.getPropertyById);
 router.put('/:id', controller.updateProperty);
 router.delete('/:id', controller.deleteProperty);
+router.put('/:id/assign-client', controller.assignClient);
 
 module.exports = router;
